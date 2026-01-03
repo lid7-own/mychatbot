@@ -3,8 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chatbot</title>
+    <title>Creation AI</title>
     <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --bg-chat: #f5f5f5;
+            --bg-container: #ffffff;
+            --text: #333333;
+            --user-msg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bot-msg: #ffffff;
+        }
+
+        /* 15 TEMA WARNA */
+        .theme-purple { --primary: #667eea; --secondary: #764ba2; }
+        .theme-blue { --primary: #4facfe; --secondary: #00f2fe; }
+        .theme-green { --primary: #43e97b; --secondary: #38f9d7; }
+        .theme-orange { --primary: #fa709a; --secondary: #fee140; }
+        .theme-red { --primary: #f83600; --secondary: #f9d423; }
+        .theme-pink { --primary: #ff6ec4; --secondary: #7873f5; }
+        .theme-teal { --primary: #16a085; --secondary: #2ecc71; }
+        .theme-sunset { --primary: #ff6b6b; --secondary: #feca57; }
+        .theme-ocean { --primary: #108dc7; --secondary: #ef8e38; }
+        .theme-forest { --primary: #134e5e; --secondary: #71b280; }
+        .theme-lavender { --primary: #a8edea; --secondary: #fed6e3; }
+        .theme-fire { --primary: #eb3349; --secondary: #f45c43; }
+        .theme-sky { --primary: #56ccf2; --secondary: #2f80ed; }
+        .theme-grape { --primary: #8e2de2; --secondary: #4a00e0; }
+        .theme-mint { --primary: #00b09b; --secondary: #96c93d; }
+
+        /* DARK MODE */
+        .dark-mode {
+            --bg-chat: #1a1a1a;
+            --bg-container: #2d2d2d;
+            --text: #ffffff;
+            --bot-msg: #3a3a3a;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,19 +48,20 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10px;
+            transition: all 0.3s ease;
         }
 
         .chat-container {
             width: 100%;
             max-width: 600px;
             height: 90vh;
-            background: white;
+            background: var(--bg-container);
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             display: flex;
@@ -34,19 +70,49 @@
         }
 
         .chat-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 20px;
-            text-align: center;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
             font-size: 24px;
             font-weight: bold;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
         }
 
         .chat-messages {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
-            background: #f5f5f5;
+            background: var(--bg-chat);
         }
 
         .message {
@@ -69,25 +135,29 @@
             padding: 12px 16px;
             border-radius: 18px;
             word-wrap: break-word;
+            color: var(--text);
         }
 
         .message.user .message-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--user-msg);
             color: white;
             border-bottom-right-radius: 4px;
         }
 
         .message.bot .message-content {
-            background: white;
-            color: #333;
+            background: var(--bot-msg);
             border-bottom-left-radius: 4px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
+        .dark-mode .message.bot .message-content {
+            color: #ffffff;
+        }
+
         .chat-input-container {
             padding: 20px;
-            background: white;
-            border-top: 1px solid #e0e0e0;
+            background: var(--bg-container);
+            border-top: 1px solid rgba(0,0,0,0.1);
             display: flex;
             gap: 10px;
         }
@@ -95,20 +165,22 @@
         #userInput {
             flex: 1;
             padding: 12px 16px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid rgba(0,0,0,0.1);
             border-radius: 25px;
             font-size: 16px;
             outline: none;
             transition: border-color 0.3s;
+            background: var(--bg-container);
+            color: var(--text);
         }
 
         #userInput:focus {
-            border-color: #667eea;
+            border-color: var(--primary);
         }
 
         #sendBtn {
             padding: 12px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
             border: none;
             border-radius: 25px;
@@ -127,12 +199,144 @@
             cursor: not-allowed;
         }
 
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-container);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: var(--text);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .modal-content h3 {
+            margin: 15px 0 10px 0;
+            color: var(--text);
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .theme-option {
+            height: 50px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .theme-option:hover {
+            transform: scale(1.05);
+            border-color: white;
+        }
+
+        .theme-option.active {
+            border-color: white;
+            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+        }
+
+        .theme-option.active::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .mode-toggle {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--text);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .close-modal {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="password"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--bg-container);
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
         .loading {
             display: inline-block;
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #667eea;
+            background: var(--primary);
             animation: pulse 1.4s infinite;
         }
 
@@ -141,81 +345,152 @@
             50% { opacity: 1; }
         }
 
-        .api-setup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+        .info-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
         }
 
-        .api-setup-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 500px;
-            width: 90%;
+        .dark-mode .info-text {
+            color: #aaa;
         }
 
-        .api-setup h2 {
-            margin-bottom: 20px;
-            color: #333;
+        .setting-group {
+            margin-bottom: 25px;
         }
 
-        .api-setup input {
-            width: 100%;
+        .model-info {
+            background: rgba(102, 126, 234, 0.1);
             padding: 12px;
-            margin-bottom: 15px;
-            border: 2px solid #e0e0e0;
             border-radius: 8px;
-            font-size: 16px;
+            margin: 10px 0;
+            font-size: 14px;
+            border-left: 4px solid var(--primary);
         }
 
-        .api-setup button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
+        .dark-mode .model-info {
+            background: rgba(102, 126, 234, 0.2);
         }
 
-        .hidden {
-            display: none;
+        .btn-secondary {
+            background: #2196f3 !important;
+        }
+
+        .btn-danger {
+            background: #f44336 !important;
+        }
+
+        .btn-gray {
+            background: #666 !important;
         }
     </style>
 </head>
-<body>
-    <!-- Popup Setup API Key -->
-    <div id="apiSetup" class="api-setup">
-        <div class="api-setup-content">
-            <h2>🔑 Setup API Key</h2>
-            <p style="margin-bottom: 15px; color: #666;">Masukkan API Key Groq Anda:</p>
+<body class="theme-purple">
+    <!-- API Setup Modal -->
+    <div id="apiSetup" class="modal active">
+        <div class="modal-content">
+            <h2 id="apiTitle">🔑 Setup API Key</h2>
+            <p class="info-text" id="apiDesc">Masukkan API Key Groq Anda:</p>
             <input type="password" id="apiKeyInput" placeholder="gsk_xxxxxxxxxxxxxxxx">
-            <button onclick="saveApiKey()">Simpan & Mulai Chat</button>
+            <button class="close-modal" onclick="saveApiKey()" id="apiSaveBtn">Simpan & Mulai Chat</button>
+        </div>
+    </div>
+
+    <!-- Theme Modal -->
+    <div id="themeModal" class="modal">
+        <div class="modal-content">
+            <h2 id="themeTitle">🎨 Pilih Tema Warna</h2>
+            
+            <h3 id="modeLabel">Mode:</h3>
+            <div class="mode-toggle">
+                <button class="mode-btn active" onclick="setMode('light')" id="lightBtn">☀️ Terang</button>
+                <button class="mode-btn" onclick="setMode('dark')" id="darkBtn">🌙 Gelap</button>
+            </div>
+
+            <h3 id="colorLabel">Tema Warna:</h3>
+            <div class="theme-grid">
+                <div class="theme-option active" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="setTheme('purple')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);" onclick="setTheme('blue')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);" onclick="setTheme('green')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);" onclick="setTheme('orange')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #f83600 0%, #f9d423 100%);" onclick="setTheme('red')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #ff6ec4 0%, #7873f5 100%);" onclick="setTheme('pink')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #16a085 0%, #2ecc71 100%);" onclick="setTheme('teal')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);" onclick="setTheme('sunset')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #108dc7 0%, #ef8e38 100%);" onclick="setTheme('ocean')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);" onclick="setTheme('forest')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);" onclick="setTheme('lavender')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);" onclick="setTheme('fire')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #56ccf2 0%, #2f80ed 100%);" onclick="setTheme('sky')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);" onclick="setTheme('grape')"></div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);" onclick="setTheme('mint')"></div>
+            </div>
+
+            <button class="close-modal" onclick="closeModal('themeModal')" id="closeThemeBtn">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h2 id="settingsTitle">⚙️ Pengaturan</h2>
+            
+            <div class="setting-group">
+                <h3 id="langLabel">🌍 Bahasa / Language:</h3>
+                <p class="info-text" id="langDesc">Pilih bahasa interface</p>
+                <select id="langSelect" onchange="changeLanguage()">
+                    <option value="id">🇮🇩 Bahasa Indonesia</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="zh">🇨🇳 中文</option>
+                    <option value="ja">🇯🇵 日本語</option>
+                </select>
+            </div>
+
+            <div class="setting-group">
+                <h3 id="modelLabel">🤖 Pilih Model AI:</h3>
+                <p class="info-text" id="modelDesc">Pilih model sesuai kebutuhan Anda</p>
+                <select id="modelSelect" onchange="saveModel()">
+                    <option value="llama-3.3-70b-versatile">🚀 Llama 3.3 70B Versatile ⭐</option>
+                    <option value="llama-3.1-8b-instant">⚡ Llama 3.1 8B Instant</option>
+                    <option value="mixtral-8x7b-32768">🎯 Mixtral 8x7B</option>
+                </select>
+                <div class="model-info" id="modelInfo"></div>
+            </div>
+
+            <div class="setting-group">
+                <h3 id="welcomeLabel">💬 Pesan Sambutan:</h3>
+                <p class="info-text" id="welcomeDesc">Ubah pesan sambutan sesuai keinginan Anda</p>
+                <textarea id="welcomeMessage" placeholder=""></textarea>
+                <button class="close-modal" onclick="saveWelcomeMessage()" id="saveWelcomeBtn">Simpan Pesan</button>
+            </div>
+
+            <div class="setting-group">
+                <h3 id="exportLabel">📥 Export Chat:</h3>
+                <p class="info-text" id="exportDesc">Download riwayat percakapan</p>
+                <button class="close-modal btn-secondary" onclick="exportChat()" id="exportBtn">💾 Download Chat History</button>
+            </div>
+
+            <div class="setting-group">
+                <h3 id="resetLabel">🗑️ Reset Chat:</h3>
+                <p class="info-text" id="resetDesc">Hapus semua percakapan</p>
+                <button class="close-modal btn-danger" onclick="resetChat()" id="resetBtn">Hapus Semua Chat</button>
+            </div>
+
+            <button class="close-modal btn-gray" onclick="closeModal('settingsModal')" id="closeSettingsBtn">Tutup</button>
         </div>
     </div>
 
     <!-- Chat Container -->
     <div class="chat-container">
         <div class="chat-header">
-            🤖 AI Chatbot
-        </div>
-        <div class="chat-messages" id="chatMessages">
-            <div class="message bot">
-                <div class="message-content">
-                    Halo! Saya AI Assistant Anda. Silakan tanya apa saja! 😊
-                </div>
+            <div class="header-title">🤖 Creation AI</div>
+            <div class="header-icons">
+                <button class="icon-btn" onclick="openModal('themeModal')" title="Tema">🎨</button>
+                <button class="icon-btn" onclick="openModal('settingsModal')" title="Pengaturan">⚙️</button>
             </div>
         </div>
+        <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-input-container">
             <input type="text" id="userInput" placeholder="Ketik pesan Anda..." onkeypress="handleKeyPress(event)">
             <button id="sendBtn" onclick="sendMessage()">Kirim</button>
@@ -226,139 +501,46 @@
         let apiKey = '';
         const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
         let conversationHistory = [];
+        let selectedModel = 'llama-3.3-70b-versatile';
+        let currentLang = 'id';
 
-        // Cek apakah API key sudah tersimpan
-        window.onload = function() {
-            const savedKey = localStorage.getItem('groq_api_key');
-            if (savedKey) {
-                apiKey = savedKey;
-                document.getElementById('apiSetup').classList.add('hidden');
-            }
-        };
-
-        function saveApiKey() {
-            const inputKey = document.getElementById('apiKeyInput').value.trim();
-            if (inputKey.length > 0) {
-                apiKey = inputKey;
-                localStorage.setItem('groq_api_key', apiKey);
-                document.getElementById('apiSetup').classList.add('hidden');
-                addMessage('API Key berhasil disimpan! Sekarang Anda bisa mulai chat. 🎉', 'bot');
-            } else {
-                alert('Mohon masukkan API Key yang valid!');
-            }
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        }
-
-        function addMessage(text, sender) {
-            const messagesContainer = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}`;
-            
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
-            contentDiv.textContent = text;
-            
-            messageDiv.appendChild(contentDiv);
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function showLoading() {
-            const messagesContainer = document.getElementById('chatMessages');
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'message bot';
-            loadingDiv.id = 'loading';
-            
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
-            contentDiv.innerHTML = '<span class="loading"></span> <span class="loading"></span> <span class="loading"></span>';
-            
-            loadingDiv.appendChild(contentDiv);
-            messagesContainer.appendChild(loadingDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function removeLoading() {
-            const loading = document.getElementById('loading');
-            if (loading) {
-                loading.remove();
-            }
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById('userInput');
-            const message = input.value.trim();
-            
-            if (message === '') return;
-            if (!apiKey) {
-                alert('Mohon setup API Key terlebih dahulu!');
-                return;
-            }
-
-            // Tampilkan pesan user
-            addMessage(message, 'user');
-            input.value = '';
-            
-            // Disable tombol kirim
-            const sendBtn = document.getElementById('sendBtn');
-            sendBtn.disabled = true;
-            
-            // Tampilkan loading
-            showLoading();
-
-            // Tambahkan ke history
-            conversationHistory.push({
-                role: 'user',
-                content: message
-            });
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`
-                    },
-                    body: JSON.stringify({
-                        model: 'llama-3.3-70b-versatile',
-                        messages: conversationHistory,
-                        temperature: 0.7,
-                        max_tokens: 1024
-                    })
-                });
-
-                removeLoading();
-
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status}`);
-                }
-
-                const data = await response.json();
-                const botReply = data.choices[0].message.content;
-
-                // Tambahkan balasan bot ke history
-                conversationHistory.push({
-                    role: 'assistant',
-                    content: botReply
-                });
-
-                // Tampilkan balasan bot
-                addMessage(botReply, 'bot');
-
-            } catch (error) {
-                removeLoading();
-                addMessage('Maaf, terjadi kesalahan. Pastikan API Key Anda benar dan coba lagi.', 'bot');
-                console.error('Error:', error);
-            }
-
-            // Enable tombol kirim
-            sendBtn.disabled = false;
-        }
-    </script>
-</body>
-  </html>
+        // TRANSLATIONS
+        const translations = {
+            id: {
+                apiTitle: '🔑 Setup API Key',
+                apiDesc: 'Masukkan API Key Groq Anda:',
+                apiSaveBtn: 'Simpan & Mulai Chat',
+                themeTitle: '🎨 Pilih Tema Warna',
+                modeLabel: 'Mode:',
+                lightBtn: '☀️ Terang',
+                darkBtn: '🌙 Gelap',
+                colorLabel: 'Tema Warna:',
+                closeThemeBtn: 'Tutup',
+                settingsTitle: '⚙️ Pengaturan',
+                langLabel: '🌍 Bahasa:',
+                langDesc: 'Pilih bahasa interface',
+                modelLabel: '🤖 Pilih Model AI:',
+                modelDesc: 'Pilih model sesuai kebutuhan Anda',
+                welcomeLabel: '💬 Pesan Sambutan:',
+                welcomeDesc: 'Ubah pesan sambutan sesuai keinginan Anda',
+                saveWelcomeBtn: 'Simpan Pesan',
+                exportLabel: '📥 Export Chat:',
+                exportDesc: 'Download riwayat percakapan',
+                exportBtn: '💾 Download Chat History',
+                resetLabel: '🗑️ Reset Chat:',
+                resetDesc: 'Hapus semua percakapan',
+                resetBtn: 'Hapus Semua Chat',
+                closeSettingsBtn: 'Tutup',
+                sendBtn: 'Kirim',
+                inputPlaceholder: 'Ketik pesan Anda...',
+                defaultWelcome: 'Halo! Saya Creation AI, asisten kreatif Anda. Siap membantu brainstorming, menulis, coding, dan kreativitas lainnya! 😊',
+                systemPrompt: 'Kamu adalah Creation AI, asisten AI yang fokus pada kreativitas dan produktivitas. Kepribadianmu: ramah, inspiratif, dan selalu positif. Keahlianmu: brainstorming, menulis, coding, desain, problem solving. Selalu jawab dalam Bahasa Indonesia.',
+                errorMsg: 'Maaf, terjadi kesalahan. Pastikan API Key Anda benar dan coba lagi.',
+                apiKeyAlert: 'Mohon setup API Key terlebih dahulu!',
+                saveSuccess: '✅ Pesan sambutan berhasil disimpan! Refresh halaman untuk melihat perubahan.',
+                saveEmpty: '⚠️ Pesan tidak boleh kosong!',
+                resetConfirm: 'Yakin ingin menghapus semua chat? Tindakan ini tidak bisa dibatalkan.',
+                resetSuccess: '✅ Chat berhasil dihapus!',
+                modelInfo1: 'Model paling pintar dan kreatif. Cocok untuk brainstorming, menulis, coding kompleks, dan problem solving.',
+                modelInfo2: 'Model tercepat dengan respon instant. Cocok untuk chat cepat, tanya jawab sederhana, dan task ringan.',
+                modelInfo3: 'Model balanced antara kecepatan dan kecerdasan. Cocok untuk ber
