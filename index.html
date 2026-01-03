@@ -15,7 +15,6 @@
             --bot-msg: #ffffff;
         }
 
-        /* 15 TEMA WARNA */
         .theme-purple { --primary: #667eea; --secondary: #764ba2; }
         .theme-blue { --primary: #4facfe; --secondary: #00f2fe; }
         .theme-green { --primary: #43e97b; --secondary: #38f9d7; }
@@ -32,7 +31,6 @@
         .theme-grape { --primary: #8e2de2; --secondary: #4a00e0; }
         .theme-mint { --primary: #00b09b; --secondary: #96c93d; }
 
-        /* DARK MODE */
         .dark-mode {
             --bg-chat: #1a1a1a;
             --bg-container: #2d2d2d;
@@ -310,6 +308,11 @@
             font-weight: bold;
         }
 
+        .close-modal:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         input[type="text"], input[type="password"], textarea, select {
             width: 100%;
             padding: 12px;
@@ -373,15 +376,45 @@
         }
 
         .btn-secondary {
-            background: #2196f3 !important;
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%) !important;
         }
 
         .btn-danger {
-            background: #f44336 !important;
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%) !important;
         }
 
         .btn-gray {
-            background: #666 !important;
+            background: linear-gradient(135deg, #666 0%, #444 100%) !important;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #c62828;
+            font-size: 14px;
+        }
+
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #2e7d32;
+            font-size: 14px;
+        }
+
+        .dark-mode .error-message {
+            background: rgba(244, 67, 54, 0.2);
+            color: #ff6b6b;
+        }
+
+        .dark-mode .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            color: #81c784;
         }
     </style>
 </head>
@@ -389,25 +422,30 @@
     <!-- API Setup Modal -->
     <div id="apiSetup" class="modal active">
         <div class="modal-content">
-            <h2 id="apiTitle">🔑 Setup API Key</h2>
-            <p class="info-text" id="apiDesc">Masukkan API Key Groq Anda:</p>
+            <h2>🔑 Setup API Key</h2>
+            <p class="info-text">Masukkan API Key Groq Anda (dimulai dengan gsk_):</p>
             <input type="password" id="apiKeyInput" placeholder="gsk_xxxxxxxxxxxxxxxx">
+            <div id="apiError" style="display: none;"></div>
             <button class="close-modal" onclick="saveApiKey()" id="apiSaveBtn">Simpan & Mulai Chat</button>
+            <p class="info-text" style="margin-top: 15px;">
+                Belum punya API Key? <br>
+                Dapatkan gratis di: <a href="https://console.groq.com" target="_blank" style="color: var(--primary);">console.groq.com</a>
+            </p>
         </div>
     </div>
 
     <!-- Theme Modal -->
     <div id="themeModal" class="modal">
         <div class="modal-content">
-            <h2 id="themeTitle">🎨 Pilih Tema Warna</h2>
+            <h2>🎨 Pilih Tema Warna</h2>
             
-            <h3 id="modeLabel">Mode:</h3>
+            <h3>Mode:</h3>
             <div class="mode-toggle">
-                <button class="mode-btn active" onclick="setMode('light')" id="lightBtn">☀️ Terang</button>
-                <button class="mode-btn" onclick="setMode('dark')" id="darkBtn">🌙 Gelap</button>
+                <button class="mode-btn active" onclick="setMode('light')">☀️ Terang</button>
+                <button class="mode-btn" onclick="setMode('dark')">🌙 Gelap</button>
             </div>
 
-            <h3 id="colorLabel">Tema Warna:</h3>
+            <h3>Tema Warna:</h3>
             <div class="theme-grid">
                 <div class="theme-option active" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="setTheme('purple')"></div>
                 <div class="theme-option" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);" onclick="setTheme('blue')"></div>
@@ -426,18 +464,18 @@
                 <div class="theme-option" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);" onclick="setTheme('mint')"></div>
             </div>
 
-            <button class="close-modal" onclick="closeModal('themeModal')" id="closeThemeBtn">Tutup</button>
+            <button class="close-modal" onclick="closeModal('themeModal')">Tutup</button>
         </div>
     </div>
 
     <!-- Settings Modal -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
-            <h2 id="settingsTitle">⚙️ Pengaturan</h2>
+            <h2>⚙️ Pengaturan</h2>
             
             <div class="setting-group">
-                <h3 id="langLabel">🌍 Bahasa / Language:</h3>
-                <p class="info-text" id="langDesc">Pilih bahasa interface</p>
+                <h3>🌍 Bahasa / Language:</h3>
+                <p class="info-text">Pilih bahasa interface</p>
                 <select id="langSelect" onchange="changeLanguage()">
                     <option value="id">🇮🇩 Bahasa Indonesia</option>
                     <option value="en">🇬🇧 English</option>
@@ -448,36 +486,36 @@
             </div>
 
             <div class="setting-group">
-                <h3 id="modelLabel">🤖 Pilih Model AI:</h3>
-                <p class="info-text" id="modelDesc">Pilih model sesuai kebutuhan Anda</p>
+                <h3>🤖 Pilih Model AI:</h3>
+                <p class="info-text">Pilih model sesuai kebutuhan Anda</p>
                 <select id="modelSelect" onchange="saveModel()">
                     <option value="llama-3.3-70b-versatile">🚀 Llama 3.3 70B Versatile ⭐</option>
                     <option value="llama-3.1-8b-instant">⚡ Llama 3.1 8B Instant</option>
                     <option value="mixtral-8x7b-32768">🎯 Mixtral 8x7B</option>
                 </select>
-                <div class="model-info" id="modelInfo"></div>
+                <div class="model-info" id="modelInfo">Model paling pintar dan kreatif. Cocok untuk brainstorming, menulis, coding kompleks, dan problem solving.</div>
             </div>
 
             <div class="setting-group">
-                <h3 id="welcomeLabel">💬 Pesan Sambutan:</h3>
-                <p class="info-text" id="welcomeDesc">Ubah pesan sambutan sesuai keinginan Anda</p>
-                <textarea id="welcomeMessage" placeholder=""></textarea>
-                <button class="close-modal" onclick="saveWelcomeMessage()" id="saveWelcomeBtn">Simpan Pesan</button>
+                <h3>💬 Pesan Sambutan:</h3>
+                <p class="info-text">Ubah pesan sambutan sesuai keinginan Anda</p>
+                <textarea id="welcomeMessage" placeholder="Halo! Saya Creation AI..."></textarea>
+                <button class="close-modal" onclick="saveWelcomeMessage()">Simpan Pesan</button>
             </div>
 
             <div class="setting-group">
-                <h3 id="exportLabel">📥 Export Chat:</h3>
-                <p class="info-text" id="exportDesc">Download riwayat percakapan</p>
-                <button class="close-modal btn-secondary" onclick="exportChat()" id="exportBtn">💾 Download Chat History</button>
+                <h3>📥 Export Chat:</h3>
+                <p class="info-text">Download riwayat percakapan</p>
+                <button class="close-modal btn-secondary" onclick="exportChat()">💾 Download Chat History</button>
             </div>
 
             <div class="setting-group">
-                <h3 id="resetLabel">🗑️ Reset Chat:</h3>
-                <p class="info-text" id="resetDesc">Hapus semua percakapan</p>
-                <button class="close-modal btn-danger" onclick="resetChat()" id="resetBtn">Hapus Semua Chat</button>
+                <h3>🗑️ Reset Chat:</h3>
+                <p class="info-text">Hapus semua percakapan</p>
+                <button class="close-modal btn-danger" onclick="resetChat()">Hapus Semua Chat</button>
             </div>
 
-            <button class="close-modal btn-gray" onclick="closeModal('settingsModal')" id="closeSettingsBtn">Tutup</button>
+            <button class="close-modal btn-gray" onclick="closeModal('settingsModal')">Tutup</button>
         </div>
     </div>
 
@@ -503,44 +541,31 @@
         let conversationHistory = [];
         let selectedModel = 'llama-3.3-70b-versatile';
         let currentLang = 'id';
+        const DEFAULT_WELCOME = 'Halo! Saya Creation AI, asisten kreatif Anda. Siap membantu brainstorming, menulis, coding, dan kreativitas lainnya! 😊';
 
-        // TRANSLATIONS
-        const translations = {
-            id: {
-                apiTitle: '🔑 Setup API Key',
-                apiDesc: 'Masukkan API Key Groq Anda:',
-                apiSaveBtn: 'Simpan & Mulai Chat',
-                themeTitle: '🎨 Pilih Tema Warna',
-                modeLabel: 'Mode:',
-                lightBtn: '☀️ Terang',
-                darkBtn: '🌙 Gelap',
-                colorLabel: 'Tema Warna:',
-                closeThemeBtn: 'Tutup',
-                settingsTitle: '⚙️ Pengaturan',
-                langLabel: '🌍 Bahasa:',
-                langDesc: 'Pilih bahasa interface',
-                modelLabel: '🤖 Pilih Model AI:',
-                modelDesc: 'Pilih model sesuai kebutuhan Anda',
-                welcomeLabel: '💬 Pesan Sambutan:',
-                welcomeDesc: 'Ubah pesan sambutan sesuai keinginan Anda',
-                saveWelcomeBtn: 'Simpan Pesan',
-                exportLabel: '📥 Export Chat:',
-                exportDesc: 'Download riwayat percakapan',
-                exportBtn: '💾 Download Chat History',
-                resetLabel: '🗑️ Reset Chat:',
-                resetDesc: 'Hapus semua percakapan',
-                resetBtn: 'Hapus Semua Chat',
-                closeSettingsBtn: 'Tutup',
-                sendBtn: 'Kirim',
-                inputPlaceholder: 'Ketik pesan Anda...',
-                defaultWelcome: 'Halo! Saya Creation AI, asisten kreatif Anda. Siap membantu brainstorming, menulis, coding, dan kreativitas lainnya! 😊',
-                systemPrompt: 'Kamu adalah Creation AI, asisten AI yang fokus pada kreativitas dan produktivitas. Kepribadianmu: ramah, inspiratif, dan selalu positif. Keahlianmu: brainstorming, menulis, coding, desain, problem solving. Selalu jawab dalam Bahasa Indonesia.',
-                errorMsg: 'Maaf, terjadi kesalahan. Pastikan API Key Anda benar dan coba lagi.',
-                apiKeyAlert: 'Mohon setup API Key terlebih dahulu!',
-                saveSuccess: '✅ Pesan sambutan berhasil disimpan! Refresh halaman untuk melihat perubahan.',
-                saveEmpty: '⚠️ Pesan tidak boleh kosong!',
-                resetConfirm: 'Yakin ingin menghapus semua chat? Tindakan ini tidak bisa dibatalkan.',
-                resetSuccess: '✅ Chat berhasil dihapus!',
-                modelInfo1: 'Model paling pintar dan kreatif. Cocok untuk brainstorming, menulis, coding kompleks, dan problem solving.',
-                modelInfo2: 'Model tercepat dengan respon instant. Cocok untuk chat cepat, tanya jawab sederhana, dan task ringan.',
-                modelInfo3: 'Model balanced antara kecepatan dan kecerdasan. Cocok untuk ber
+        const SYSTEM_PROMPT = {
+            role: 'system',
+            content: 'Kamu adalah Creation AI, asisten AI yang fokus pada kreativitas dan produktivitas. Kepribadianmu: ramah, inspiratif, dan selalu positif. Keahlianmu: brainstorming, menulis, coding, desain, problem solving. Selalu jawab dalam Bahasa Indonesia kecuali user meminta bahasa lain.'
+        };
+
+        const modelDescriptions = {
+            'llama-3.3-70b-versatile': 'Model paling pintar dan kreatif. Cocok untuk brainstorming, menulis, coding kompleks, dan problem solving.',
+            'llama-3.1-8b-instant': 'Model cepat dan efisien. Cocok untuk pertanyaan sederhana dan percakapan kasual.',
+            'mixtral-8x7b-32768': 'Model multitasking dengan konteks panjang. Cocok untuk analisis dokumen dan tugas kompleks.'
+        };
+
+        // Inisialisasi
+        window.onload = function() {
+            const savedKey = localStorage.getItem('groq_api_key');
+            if (savedKey) {
+                apiKey = savedKey;
+                document.getElementById('apiSetup').classList.remove('active');
+            }
+
+            const savedTheme = localStorage.getItem('theme') || 'purple';
+            const savedMode = localStorage.getItem('mode') || 'light';
+            setTheme(savedTheme, false);
+            setMode(savedMode, false);
+
+            selectedModel = localStorage.getItem('selected_model') || 'llama-3.3-70b-versatile';
+            
